@@ -1,14 +1,12 @@
 package model
 
 type Users struct {
-	ID                string `gorm:"column:id;primary_key"`
+	ID                int64  `gorm:"column:id;primary_key;omitempty"`
 	Username          string `gorm:"column:username;NOT NULL"`             // 用户名
 	Password          string `gorm:"column:password;NOT NULL"`             // 密码
-	FaceImage         string `gorm:"column:face_image"`                    // 我的头像，如果没有默认给一张
-	Nickname          string `gorm:"column:nickname"`                      // 昵称
-	FansCounts        int    `gorm:"column:fans_counts;default:0"`         // 我的粉丝数量
-	FollowCounts      int    `gorm:"column:follow_counts;default:0"`       // 我关注的人总数
-	ReceiveLikeCounts int    `gorm:"column:receive_like_counts;default:0"` // 我接受到的赞美/收藏 的数量
+	FansCounts        int64  `gorm:"column:fans_counts;default:0"`         // 我的粉丝数量
+	FollowCounts      int64  `gorm:"column:follow_counts;default:0"`       // 我关注的人总数
+	ReceiveLikeCounts int64  `gorm:"column:receive_like_counts;default:0"` // 我接受到的赞美/收藏 的数量
 }
 
 // 用户喜欢的/赞过的视频

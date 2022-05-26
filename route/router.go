@@ -1,11 +1,11 @@
-package main
+package route
 
 import (
-	"github.com/RaymondCode/simple-demo/controller"
+	"SimpleTikTok/controller"
 	"github.com/gin-gonic/gin"
 )
 
-func initRouter(r *gin.Engine) {
+func InitRouter(r *gin.Engine) {
 	// public directory is used to serve static resources
 	r.Static("/static", "./public")
 
@@ -13,9 +13,9 @@ func initRouter(r *gin.Engine) {
 
 	// basic apis
 	apiRouter.GET("/feed/", controller.Feed)
-	apiRouter.GET("/user/", controller.UserInfo)
-	apiRouter.POST("/user/register/", controller.Register)
-	apiRouter.POST("/user/login/", controller.Login)
+	apiRouter.GET("/user/", controller.UserGetInfoHandle)
+	apiRouter.POST("/user/register/", controller.UserRegisterHandel)
+	apiRouter.POST("/user/login/", controller.UserLoginHandle)
 	apiRouter.POST("/publish/action/", controller.Publish)
 	apiRouter.GET("/publish/list/", controller.PublishList)
 

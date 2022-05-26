@@ -20,3 +20,26 @@ go build && ./simple-demo
 ### 测试数据
 
 测试数据写在 demo_data.go 中，用于列表接口的 mock 测试
+
+### 5.26 谢腾
+将功能抽象了出来，分为
+
+common:用于数据库的连接以及放置 约定的Response结构体
+
+controller:负责每一个接口的请求转发
+
+dao：实现与数据库的交互
+
+model :放置gorm与数据的映射结构体
+
+public ：暂时放置静态资源
+
+route ：组成接口的group
+
+service ：将dao封装成服务
+
+
+增加了注册与登录功能，原来的表因为id都为string，现在将其改为了int，并且取消了外键
+尽量在应用层面实现数据关联，并且没有加上comment，做这块接口的同学自己对照创建一下
+
+后续需要开发新的接口的时候，直接在controller上写自己的handle即可，然后对应增加dao与service
