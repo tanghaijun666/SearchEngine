@@ -9,7 +9,8 @@ var _db *gorm.DB
 
 func init() {
 	var err error
-	dsn := "root:710382941@tcp(127.0.0.1:3306)/tiktok?charset=utf8&parseTime=True&loc=Local&timeout=10s"
+	// dsn := "root:710382941@tcp(127.0.0.1:3306)/tiktok?charset=utf8&parseTime=True&loc=Local&timeout=10s"
+	dsn := "root:Nulixuexi123!@tcp(127.0.0.1:3306)/test?charset=utf8&parseTime=True&loc=Local&timeout=10s"
 	_db, err = gorm.Open(mysql.Open(dsn))
 	if err != nil {
 		panic("数据库连接错误,error=" + err.Error())

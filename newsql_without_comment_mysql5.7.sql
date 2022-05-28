@@ -64,9 +64,9 @@ CREATE TABLE `users_like_videos` (
 -- ----------------------------
 DROP TABLE IF EXISTS `videos`;
 CREATE TABLE `videos` (
-  `id` int(11) NOT NULL,
+  `id` int(64) NOT NULL AUTO_INCREMENT,
   `user_id` varchar(64) NOT NULL COMMENT '发布者id',
-  `video_desc` varchar(128) DEFAULT NULL COMMENT '视频描述',
+  `video_title` varchar(128) DEFAULT NULL COMMENT '视频标题',
   `video_path` varchar(255) NOT NULL COMMENT '视频存放的路径',
   `cover_path` varchar(255) DEFAULT NULL COMMENT '视频封面图',
   `like_counts` bigint(20) NOT NULL DEFAULT '0' COMMENT '喜欢/赞美的数量',
