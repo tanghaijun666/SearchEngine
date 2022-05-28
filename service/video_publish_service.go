@@ -28,9 +28,9 @@ func PublishAction(data *multipart.FileHeader, title string, userId int64, c *gi
 		return err
 	}
 	video := &model.Videos{
-		UserID:     userId,   // 发布者id
-		VideoTitle: title,    // 视频标题
-		VideoPath:  saveFile, // 视频存放的路径
+		UserID:     userId,    // 发布者id
+		VideoTitle: title,     // 视频标题
+		VideoPath:  finalName, // 视频存放的路径
 		// CoverPath:               ,      // 视频封面图
 		CreateTime: time.Now(),
 	}

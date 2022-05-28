@@ -5,9 +5,14 @@ import (
 	"SimpleTikTok/model"
 	"SimpleTikTok/service"
 	"net/http"
+	"path/filepath"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+)
+
+const (
+	videoURL = "http://localhost:8080/static/"
 )
 
 type VideoListResponse struct {
@@ -26,9 +31,10 @@ func CheckLogIn(token string, c *gin.Context) bool {
 }
 func ModeltoCommomStruct(mVideo *model.Videos, author commom.Userinfo) commom.Video {
 	video := commom.Video{
-		Id:      mVideo.ID,
-		Author:  author,
-		PlayUrl: mVideo.VideoPath,
+		Id:     mVideo.ID,
+		Author: author,
+
+		PlayUrl: filepath.Join(videoURL, mVideo.VideoPath),
 		// CoverUrl      string   `json:"cover_url,omitempty"`
 		// FavoriteCount int64    `json:"favorite_count,omitempty"`
 		// CommentCount  int64    `json:"comment_count,omitempty"`
@@ -71,13 +77,13 @@ func Publish(c *gin.Context) {
 
 // PublishList all users have same publish video list
 func PublishList(c *gin.Context) {
-	token := c.PostForm("token")
+	token := c.Query("token")
 	login := CheckLogIn(token, c)
 	if !login {
 		return
 	}
 	userInMap := usersLoginInfo[token]
-	id, err := strconv.Atoi(c.PostForm("user_id"))
+	id, err := strconv.Atoi(c.Query("user_id"))
 	if err != nil || int64(id) != userInMap.Id {
 		c.JSON(http.StatusOK, commom.Response{
 			StatusCode: 1,
