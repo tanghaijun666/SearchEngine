@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	videoURL = "http://localhost:8080/static/"
+	staticURL = "http://localhost:8080/static/"
 )
 
 type VideoListResponse struct {
@@ -34,8 +34,8 @@ func ModeltoCommomStruct(mVideo *model.Videos, author commom.Userinfo) commom.Vi
 		Id:     mVideo.ID,
 		Author: author,
 
-		PlayUrl: filepath.Join(videoURL, mVideo.VideoPath),
-		// CoverUrl      string   `json:"cover_url,omitempty"`
+		PlayUrl:  filepath.Join(staticURL, mVideo.VideoPath),
+		CoverUrl: filepath.Join(staticURL, mVideo.CoverPath),
 		// FavoriteCount int64    `json:"favorite_count,omitempty"`
 		// CommentCount  int64    `json:"comment_count,omitempty"`
 		// IsFavorite    bool     `json:"is_favorite,omitempty"`
