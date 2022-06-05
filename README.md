@@ -43,3 +43,9 @@ service ：将dao封装成服务
 尽量在应用层面实现数据关联，并且没有加上comment，做这块接口的同学自己对照创建一下
 
 后续需要开发新的接口的时候，直接在controller上写自己的handle即可，然后对应增加dao与service
+
+## 6.5 谢腾
+
+在dao层增加了jwt颁发token的功能（本来想放到common但是会出现import cycle not allowed的问题）
+
+后续可以使用JwtAuth去将获取的token解析为userid和username

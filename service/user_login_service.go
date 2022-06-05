@@ -60,9 +60,11 @@ func (u *UserLogininfo) updateData() error {
 	if err := userLoginDao.AddUser(&user); err != nil {
 		return err
 	}
-	//获取token 和 userid
-	//token 暂时用username+password
-	token := u.username + u.password
+	//颁发token
+	token, err := dao.GenerateToken(user.ID)
+	if err != nil {
+		return err
+	}
 	u.data = &UserLoginResponse{UserId: int64(user.ID), Token: token}
 	return nil
 }
@@ -93,9 +95,13 @@ func (u *UserLogininfo) getData() error {
 	if err := userLoginDao.CheckUser(u.username, u.password, &user); err != nil {
 		return err
 	}
-	//获取token 和 userid
-	//token 暂时用username+password
-	token := u.username + u.password
+
+	//颁发token
+	token, err := dao.GenerateToken(user.ID)
+	if err != nil {
+		return err
+	}
+
 	u.data = &UserLoginResponse{UserId: int64(user.ID), Token: token}
 	return nil
 
