@@ -1,6 +1,7 @@
 package service
 
 import (
+	"SimpleTikTok/commom"
 	"SimpleTikTok/dao"
 	"SimpleTikTok/model"
 	"bytes"
@@ -19,7 +20,23 @@ import (
 
 const (
 	VideoTitle = 128
+	staticURL  = "http://localhost:8080/static/"
 )
+
+func ModeltoCommomStruct(mVideo *model.Videos, author commom.Userinfo) commom.Video {
+	video := commom.Video{
+		Id:     mVideo.ID,
+		Author: author,
+
+		PlayUrl:       filepath.Join(staticURL, mVideo.VideoPath),
+		CoverUrl:      filepath.Join(staticURL, mVideo.CoverPath),
+		FavoriteCount: mVideo.LikeCounts,
+		CommentCount:  0,
+		IsFavorite:    false,
+		Title:         mVideo.VideoTitle,
+	}
+	return video
+}
 
 func mp4ToJPEG(fileName string) string {
 	if idx := strings.Index(fileName, "."); idx != -1 {
@@ -95,7 +112,18 @@ func PublishAction(data *multipart.FileHeader, title string, userId int64, c *gi
 	return nil
 }
 
-func PublishList(id int64) ([]*model.Videos, error) {
+func FindPublishList(id int64) ([]commom.Video, error) {
 	videos, err := dao.NewVideoDaoInstance().QueryVideoByUserId(id)
-	return videos, err
+	if err != nil {
+		return nil, err
+	}
+	user, err := querybyId(id)
+	if err != nil {
+		return nil, err
+	}
+	videoList := make([]commom.Video, len(videos))
+	for i, video := range videos {
+		videoList[i] = ModeltoCommomStruct(video, *user)
+	}
+	return videoList, err
 }

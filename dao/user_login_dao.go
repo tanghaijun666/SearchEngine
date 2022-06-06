@@ -12,13 +12,13 @@ type UserLoginDao struct {
 
 //生成一个新的单例，实现LoginDao的
 var (
-	userLoginDao *UserLoginDao
-	once         sync.Once
+	userLoginDao  *UserLoginDao
+	userLoginOnce sync.Once
 )
 
 func NewUserLoginDao() *UserLoginDao {
 	//保证只执行一次
-	once.Do(func() {
+	userLoginOnce.Do(func() {
 		userLoginDao = new(UserLoginDao)
 	})
 	return userLoginDao

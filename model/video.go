@@ -12,3 +12,17 @@ type Videos struct {
 	LikeCounts int64     `gorm:"column:like_counts;default:0;NOT NULL"` // 喜欢/赞美的数量
 	CreateTime time.Time `gorm:"column:create_time;NOT NULL"`           // 创建时间
 }
+
+type VideoWithUser struct {
+	ID           int64
+	UserID       int64     // 发布者id
+	VideoTitle   string    // 视频描述
+	VideoPath    string    // 视频存放的路径
+	CoverPath    string    // 视频封面图
+	LikeCounts   int64     // 喜欢/赞美的数量
+	CreateTime   time.Time // 创建时间
+	Username     string    // 用户名
+	FansCounts   int64     // 我的粉丝数量
+	FollowCounts int64     // 我关注的人总数
+
+}

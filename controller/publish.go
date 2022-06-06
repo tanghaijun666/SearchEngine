@@ -2,17 +2,12 @@ package controller
 
 import (
 	"SimpleTikTok/commom"
-	"SimpleTikTok/model"
+	"SimpleTikTok/dao"
 	"SimpleTikTok/service"
 	"net/http"
-	"path/filepath"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-)
-
-const (
-	staticURL = "http://localhost:8080/static/"
 )
 
 type VideoListResponse struct {
@@ -22,31 +17,17 @@ type VideoListResponse struct {
 
 // check if logged in
 func CheckLogIn(token string, c *gin.Context) bool {
-	if _, exist := usersLoginInfo[token]; !exist {
-		c.JSON(http.StatusOK, commom.Response{StatusCode: 1, StatusMsg: token})
-
+	if _, err := dao.JwtAuth(token); err != nil {
+		c.JSON(http.StatusOK, commom.Response{StatusCode: 1, StatusMsg: "Not Logged In"})
 		return false
 	}
 	return true
 }
-func ModeltoCommomStruct(mVideo *model.Videos, author commom.Userinfo) commom.Video {
-	video := commom.Video{
-		Id:     mVideo.ID,
-		Author: author,
 
-		PlayUrl:  filepath.Join(staticURL, mVideo.VideoPath),
-		CoverUrl: filepath.Join(staticURL, mVideo.CoverPath),
-		// FavoriteCount int64    `json:"favorite_count,omitempty"`
-		// CommentCount  int64    `json:"comment_count,omitempty"`
-		// IsFavorite    bool     `json:"is_favorite,omitempty"`
-		Title: mVideo.VideoTitle,
-	}
-	return video
-}
-
-// Publish check token then save upload file to public directory
+// Publish check token then save uploaded file to public directory
 func Publish(c *gin.Context) {
 	token := c.PostForm("token")
+	// use token to check if logged In
 	if islogin := CheckLogIn(token, c); !islogin {
 		return
 	}
@@ -59,7 +40,7 @@ func Publish(c *gin.Context) {
 		return
 	}
 	title := c.PostForm("title")
-	id := usersLoginInfo[token].Id
+	id, _ := dao.JwtAuth(token)
 	err = service.PublishAction(data, title, id, c)
 	if err != nil {
 		c.JSON(http.StatusOK, commom.Response{
@@ -78,37 +59,42 @@ func Publish(c *gin.Context) {
 // PublishList all users have same publish video list
 func PublishList(c *gin.Context) {
 	token := c.Query("token")
-	login := CheckLogIn(token, c)
-	if !login {
+	tokenId, err := dao.JwtAuth(token)
+	if err != nil {
+		c.JSON(http.StatusOK, commom.Response{StatusCode: 1, StatusMsg: "Not Logged In"})
 		return
+
 	}
-	userInMap := usersLoginInfo[token]
 	id, err := strconv.Atoi(c.Query("user_id"))
-	if err != nil || int64(id) != userInMap.Id {
+	if err != nil {
 		c.JSON(http.StatusOK, commom.Response{
 			StatusCode: 1,
-			StatusMsg:  "unable to find user id",
+			StatusMsg:  "Incorrect user id form",
 		})
 		return
 
 	}
-	videos, err := service.PublishList(userInMap.Id)
+	if tokenId != int64(id) {
+		c.JSON(http.StatusOK, commom.Response{
+			StatusCode: 1,
+			StatusMsg:  "Inconsistent User Id and Token",
+		})
+		return
+
+	}
+	videos, err := service.FindPublishList(int64(id))
 	if err != nil {
 		c.JSON(http.StatusOK, commom.Response{
 			StatusCode: 1,
-			StatusMsg:  "unable to find user id",
+			StatusMsg:  "unable to find videos",
 		})
 		return
-	}
-	videoList := make([]commom.Video, len(videos))
-	for i, video := range videos {
-		videoList[i] = ModeltoCommomStruct(video, userInMap)
 	}
 
 	c.JSON(http.StatusOK, VideoListResponse{
 		Response: commom.Response{
 			StatusCode: 0,
 		},
-		VideoList: videoList,
+		VideoList: videos,
 	})
 }

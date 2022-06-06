@@ -22,19 +22,6 @@ func NewVideoDaoInstance() *VideoDao {
 	return videoDao
 }
 
-// func (*PostDao) QueryPostById(id int64) (*Post, error) {
-// 	var post Post
-// 	err := db.Where("id = ?", id).Find(&post).Error
-// 	if err == gorm.ErrRecordNotFound {
-// 		return nil, nil
-// 	}
-// 	if err != nil {
-// 		util.Logger.Error("find post by id err:" + err.Error())
-// 		return nil, err
-// 	}
-// 	return &post, nil
-// }
-
 func (*VideoDao) QueryVideoByUserId(userId int64) ([]*model.Videos, error) {
 	var videos []*model.Videos
 	db := commom.GetDB()
