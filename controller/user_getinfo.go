@@ -13,7 +13,7 @@ import (
 
 type UserInfoRespone struct {
 	commom.Response
-	*commom.Userinfo
+	*commom.Userinfo `json:"user"`
 }
 
 //封装代理查询操作
