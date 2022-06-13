@@ -5,6 +5,7 @@ import (
 	"SimpleTikTok/dao"
 	"errors"
 	"fmt"
+	"math/rand"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -84,6 +85,8 @@ func (s *FavoriteService) Add(videoId int64, token string) error {
 		VideoId:   videoId,
 		CreateAt:  time.Now(),
 	}
+	rand.Seed(time.Now().Unix())
+	newFavorite.Id = rand.Int63n(10000)
 	err := dao.NewFavoriteDaoInstance().Save(newFavorite)
 	if err != nil {
 		return err

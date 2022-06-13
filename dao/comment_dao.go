@@ -6,22 +6,22 @@ import (
 	"sync"
 )
 
-type CommentDao struct {
+type CommentDaoByTHJ struct {
 }
 
 var (
-	commentDao  *CommentDao
-	commentOnce sync.Once
+	commentDaoByTHJ  *CommentDaoByTHJ
+	commentOnceByTHJ sync.Once
 )
 
-func NewCommentDao() *CommentDao {
-	commentOnce.Do(func() {
-		commentDao = new(CommentDao)
+func NewCommentDaoByTHJ() *CommentDaoByTHJ {
+	commentOnceByTHJ.Do(func() {
+		commentDaoByTHJ = new(CommentDaoByTHJ)
 	})
-	return commentDao
+	return commentDaoByTHJ
 }
 
-func (*CommentDao) QueryCommentsById(videoId int64) []model.Comments {
+func (*CommentDaoByTHJ) QueryCommentsById(videoId int64) []model.Comments {
 	var comments []model.Comments
 	//从连接池里拿数据
 	db := commom.GetDB()

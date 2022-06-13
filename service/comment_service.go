@@ -13,7 +13,7 @@ import (
 //	return comments, nil
 //}
 func CommentsList(id int64) ([]commom.Comment, error) {
-	commentDAO := dao.NewCommentDao()
+	commentDAO := dao.NewCommentDaoByTHJ()
 	//var comments []model.Comments
 	var comments = commentDAO.QueryCommentsById(id)
 	if comments != nil {
