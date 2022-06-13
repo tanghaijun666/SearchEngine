@@ -49,3 +49,6 @@ service ：将dao封装成服务
 在dao层增加了jwt颁发token的功能（本来想放到common但是会出现import cycle not allowed的问题）
 
 后续可以使用JwtAuth去将获取的token解析为userid和username
+
+##   akun
+点赞和点赞列表和评论的数据库文件
