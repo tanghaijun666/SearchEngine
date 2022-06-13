@@ -2,6 +2,17 @@ package model
 
 import "time"
 
+type Video struct {
+	Id            int64
+	AuthorId      int64
+	PlayUrl       string
+	CoverUrl      string
+	Title         string
+	CreateAt      time.Time
+	FavoriteCount int64
+	CommentCount  int64
+}
+
 // 视频信息表
 type Videos struct {
 	ID         int64     `gorm:"column:id;primary_key"`
