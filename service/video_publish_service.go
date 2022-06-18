@@ -37,9 +37,28 @@ func ModeltoCommomStruct(mVideo *model.Videos, author commom.Userinfo) commom.Vi
 	}
 	return video
 }
+func contains(s []string, str string) bool {
+	for _, v := range s {
+		if v == str {
+			return true
+		}
+	}
 
-func mp4ToJPEG(fileName string) string {
-	if idx := strings.Index(fileName, "."); idx != -1 {
+	return false
+}
+func getExt(fileName string) string {
+	if idx := strings.LastIndex(fileName, "."); idx != -1 {
+		fileName = fileName[idx+1:]
+	}
+	s := []string{"mp4", "3gp", "mov"}
+	if contains(s, fileName) {
+		return fileName
+	}
+	return "False"
+
+}
+func videoToJPEG(fileName string) string {
+	if idx := strings.LastIndex(fileName, "."); idx != -1 {
 		fileName = fileName[:idx]
 	}
 	jpegFileNameArray := []string{fileName, ".jpeg"}
@@ -59,7 +78,7 @@ func ExtractImage(data *multipart.FileHeader, fileName string) error {
 	vframes := "1"
 	vf := "select=eq(n\\,1)"
 
-	outputArray := []string{"public/photo/", mp4ToJPEG(fileName)}
+	outputArray := []string{"public/photo/", videoToJPEG(fileName)}
 	output := strings.Join(outputArray, "")
 
 	cmd := exec.Command(command,
@@ -84,10 +103,14 @@ func PublishAction(data *multipart.FileHeader, title string, userId int64, c *gi
 	now := time.Now() // current local time
 	sec := now.Unix()
 	filename := filepath.Base(data.Filename)
-	finalName := fmt.Sprintf("%d_%d_%s", userId, sec, filename)
+	ext := getExt(filename)
+	if ext == "false" {
+		return errors.New("Invalid video type, please upload mp4 videos")
+	}
+	finalName := fmt.Sprintf("%d_%d.%s", userId, sec, ext)
 	saveFile := filepath.Join("./public/video/", finalName)
 	dbVideoFile := filepath.Join("./video/", finalName)
-	dbPhotoFile := filepath.Join("./photo/", mp4ToJPEG(finalName))
+	dbPhotoFile := filepath.Join("./photo/", videoToJPEG(finalName))
 	if err := c.SaveUploadedFile(data, saveFile); err != nil {
 		return err
 	}
