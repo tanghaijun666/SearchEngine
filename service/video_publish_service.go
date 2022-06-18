@@ -28,8 +28,8 @@ func ModeltoCommomStruct(mVideo *model.Videos, author commom.Userinfo) commom.Vi
 		Id:     mVideo.ID,
 		Author: author,
 
-		PlayUrl:       filepath.Join(staticURL, mVideo.VideoPath),
-		CoverUrl:      filepath.Join(staticURL, mVideo.CoverPath),
+		PlayUrl:       staticURL + mVideo.VideoPath,
+		CoverUrl:      staticURL + mVideo.CoverPath,
 		FavoriteCount: mVideo.LikeCounts,
 		CommentCount:  0,
 		IsFavorite:    false,
