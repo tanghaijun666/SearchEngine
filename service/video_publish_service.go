@@ -109,8 +109,8 @@ func PublishAction(data *multipart.FileHeader, title string, userId int64, c *gi
 	}
 	finalName := fmt.Sprintf("%d_%d.%s", userId, sec, ext)
 	saveFile := filepath.Join("./public/video/", finalName)
-	dbVideoFile := filepath.Join("./video/", finalName)
-	dbPhotoFile := filepath.Join("./photo/", videoToJPEG(finalName))
+	dbVideoFile := filepath.ToSlash(filepath.Join("./video/", finalName))
+	dbPhotoFile := filepath.ToSlash(filepath.Join("./photo/", videoToJPEG(finalName)))
 	if err := c.SaveUploadedFile(data, saveFile); err != nil {
 		return err
 	}

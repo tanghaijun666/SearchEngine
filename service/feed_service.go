@@ -4,7 +4,6 @@ import (
 	"SimpleTikTok/commom"
 	"SimpleTikTok/dao"
 	"SimpleTikTok/model"
-	"path/filepath"
 )
 
 func VideoWUserToVideo(VideoWithUser *model.VideoWithUser) commom.Video {
@@ -19,8 +18,8 @@ func VideoWUserToVideo(VideoWithUser *model.VideoWithUser) commom.Video {
 		Id:     VideoWithUser.ID,
 		Author: author,
 
-		PlayUrl:       filepath.Join(staticURL, VideoWithUser.VideoPath),
-		CoverUrl:      filepath.Join(staticURL, VideoWithUser.CoverPath),
+		PlayUrl:       staticURL + VideoWithUser.VideoPath,
+		CoverUrl:      staticURL + VideoWithUser.CoverPath,
 		FavoriteCount: VideoWithUser.LikeCounts,
 		CommentCount:  0,
 		IsFavorite:    false,
